@@ -1,0 +1,1116 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ND Fitness Track</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Work+Sans:wght@400;500;600;700&display=swap');
+
+:root{
+  --maroon:#6E1F2A;
+  --maroon-light:#8B3A44;
+  --black:#111111;
+  --cream:#F5EBDD;
+  --cream-dark:#E9DCC5;
+  --navy:#182A45;
+  --gold:#B8912E;
+  --line: rgba(17,17,17,0.14);
+}
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;}
+body{
+  background:var(--cream);
+  color:var(--black);
+  font-family:'Work Sans', system-ui, sans-serif;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,.display{
+  font-family:'Fraunces', Georgia, serif;
+}
+#app{
+  max-width:480px;
+  margin:0 auto;
+  min-height:100vh;
+  background:var(--cream);
+  position:relative;
+  padding-bottom:88px;
+}
+/* ---- top bar ---- */
+.topbar{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:18px 18px 10px 18px;
+}
+.brand{
+  display:flex;
+  align-items:baseline;
+  gap:8px;
+}
+.brand .mark{
+  font-family:'Fraunces', serif;
+  font-weight:700;
+  font-size:20px;
+  color:var(--maroon);
+  letter-spacing:0.2px;
+}
+.brand .sub{
+  font-size:11px;
+  color:var(--navy);
+  opacity:0.75;
+}
+.icon-btn{
+  width:38px;height:38px;
+  border-radius:50%;
+  border:1.5px solid var(--line);
+  background:var(--cream-dark);
+  display:flex;align-items:center;justify-content:center;
+  font-size:16px;
+  cursor:pointer;
+}
+.avatar{
+  width:38px;height:38px;border-radius:50%;
+  background:var(--maroon);
+  color:var(--cream);
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Fraunces',serif;font-weight:600;font-size:13px;
+  cursor:pointer;
+  border:2px solid var(--gold);
+}
+/* ---- section wrapper ---- */
+.section{ padding:8px 18px 4px 18px; }
+.eyebrow{
+  font-size:12.5px;
+  color:var(--maroon);
+  font-weight:600;
+  margin:0 0 8px 2px;
+}
+/* ---- character card ---- */
+.charcard{
+  background:var(--black);
+  color:var(--cream);
+  border-radius:14px;
+  padding:20px 20px 18px 20px;
+  position:relative;
+  overflow:hidden;
+  border:1px solid #000;
+}
+.charcard::before{
+  content:"";
+  position:absolute;
+  top:-40px;right:-40px;
+  width:140px;height:140px;
+  border-radius:50%;
+  background:radial-gradient(circle, rgba(184,145,46,0.28), transparent 70%);
+}
+.charcard .lvl-row{
+  display:flex;justify-content:space-between;align-items:flex-end;
+  margin-bottom:10px;
+}
+.charcard .lvl-num{
+  font-family:'Fraunces',serif;
+  font-size:13px;
+  color:var(--gold);
+  letter-spacing:0.5px;
+  margin-bottom:2px;
+}
+.charcard .title{
+  font-family:'Fraunces',serif;
+  font-weight:600;
+  font-size:22px;
+  line-height:1.1;
+}
+.charcard .xp-txt{
+  font-size:12px;
+  color:#d8cdb8;
+  text-align:right;
+}
+.xpbar-track{
+  width:100%;height:9px;border-radius:6px;
+  background:rgba(245,235,221,0.16);
+  overflow:hidden;
+  margin-bottom:14px;
+}
+.xpbar-fill{
+  height:100%;
+  background:linear-gradient(90deg, var(--gold), #e0b95a);
+  border-radius:6px;
+}
+.streak-row{ display:flex; gap:14px; flex-wrap:wrap; }
+.streak-chip{
+  font-size:12px;
+  color:#e7dcc6;
+  background:rgba(245,235,221,0.08);
+  border:1px solid rgba(245,235,221,0.18);
+  border-radius:20px;
+  padding:5px 10px;
+}
+/* ---- quick actions ---- */
+.quick-grid{
+  display:grid;grid-template-columns:repeat(4,1fr);gap:8px;
+  margin-top:14px;
+}
+.quick-btn{
+  background:var(--cream-dark);
+  border:1.5px solid var(--line);
+  border-radius:12px;
+  padding:12px 4px;
+  text-align:center;
+  cursor:pointer;
+  font-size:11.5px;
+  font-weight:600;
+  color:var(--black);
+}
+.quick-btn .qi{ font-size:19px; display:block; margin-bottom:4px; }
+.quick-btn:active{ background:var(--maroon); color:var(--cream); }
+
+/* ---- quest card ---- */
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:14px 16px;
+  margin-bottom:10px;
+}
+.quest-item{
+  display:flex; align-items:center; justify-content:space-between;
+  padding:10px 0;
+  border-bottom:1px dashed var(--line);
+}
+.quest-item:last-child{ border-bottom:none; }
+.quest-left{ display:flex; align-items:center; gap:10px; }
+.quest-check{
+  width:24px;height:24px;border-radius:7px;
+  border:1.6px solid var(--maroon);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+  font-size:13px;
+  cursor:pointer;
+  color:var(--maroon);
+  background:transparent;
+}
+.quest-check.done{
+  background:var(--maroon);
+  color:var(--cream);
+}
+.quest-label{ font-size:14.5px; font-weight:500; }
+.quest-label.done{ text-decoration:line-through; opacity:0.55; }
+.quest-xp{ font-size:12px; color:var(--gold); font-weight:700; white-space:nowrap; }
+.btn{
+  border:none;
+  border-radius:10px;
+  padding:11px 14px;
+  font-weight:600;
+  font-size:14px;
+  cursor:pointer;
+}
+.btn-maroon{ background:var(--maroon); color:var(--cream); }
+.btn-outline{ background:transparent; color:var(--maroon); border:1.5px solid var(--maroon); }
+.btn-navy{ background:var(--navy); color:var(--cream); }
+.btn-full{ width:100%; }
+.btn-sm{ padding:7px 10px; font-size:12.5px; border-radius:8px; }
+
+/* ---- boss card ---- */
+.boss-card{
+  background:var(--navy); color:var(--cream);
+  border-radius:14px; padding:16px;
+  margin-bottom:14px;
+}
+.boss-card h3{ margin:0 0 2px 0; font-size:17px; }
+.boss-card .boss-sub{ font-size:11.5px; opacity:0.75; margin-bottom:10px; }
+.boss-obj{ display:flex; align-items:center; gap:8px; font-size:13px; padding:5px 0; }
+.boss-obj .dot{ width:9px;height:9px;border-radius:50%; border:1.5px solid var(--gold); flex-shrink:0;}
+.boss-obj .dot.on{ background:var(--gold); }
+.boss-cleared{
+  margin-top:10px; background:var(--gold); color:#241a03; text-align:center;
+  padding:8px; border-radius:8px; font-weight:700; font-size:12.5px;
+}
+
+/* ---- forms ---- */
+label{ font-size:12px; font-weight:600; color:var(--navy); display:block; margin:10px 0 4px 0; }
+input,select,textarea{
+  width:100%;
+  padding:10px 11px;
+  border-radius:9px;
+  border:1.4px solid var(--line);
+  background:#fff;
+  font-size:14px;
+  font-family:inherit;
+  color:var(--black);
+}
+textarea{ resize:vertical; min-height:44px; }
+.row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.row3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+.chip-row{ display:flex; flex-wrap:wrap; gap:8px; margin-top:6px; }
+.chip{
+  padding:7px 13px; border-radius:20px; font-size:12.5px; font-weight:600;
+  border:1.4px solid var(--line); background:#fff; cursor:pointer; color:var(--black);
+}
+.chip.active{ background:var(--maroon); color:var(--cream); border-color:var(--maroon); }
+.small-muted{ font-size:11.5px; color:#6b6258; margin-top:4px;}
+
+/* ---- tabs ---- */
+.tabbar{ display:flex; gap:6px; margin-bottom:14px; overflow-x:auto; padding-bottom:2px;}
+.tabbtn{
+  padding:8px 13px; border-radius:20px; font-size:12.5px; font-weight:600;
+  border:1.4px solid var(--line); background:#fff; white-space:nowrap; cursor:pointer;
+}
+.tabbtn.active{ background:var(--black); color:var(--cream); border-color:var(--black); }
+
+/* ---- exercise set list ---- */
+.set-row{
+  display:flex; justify-content:space-between; align-items:center;
+  font-size:13px; padding:8px 0; border-bottom:1px dashed var(--line);
+}
+.set-row:last-child{ border-bottom:none; }
+.pr-tag{ font-size:10.5px; color:var(--gold); font-weight:700; }
+
+/* ---- achievements ---- */
+.ach-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.ach-card{
+  border-radius:12px; padding:12px; text-align:center;
+  border:1.4px solid var(--line); background:#fff;
+}
+.ach-card.locked{ opacity:0.38; }
+.ach-card .ach-emoji{ font-size:24px; display:block; margin-bottom:4px;}
+.ach-card .ach-name{ font-size:12px; font-weight:700; }
+.ach-card .ach-desc{ font-size:10.5px; color:#6b6258; margin-top:3px; }
+
+/* ---- bottom nav ---- */
+.bottomnav{
+  position:fixed; bottom:0; left:0; right:0;
+  max-width:480px; margin:0 auto;
+  background:#fff;
+  border-top:1px solid var(--line);
+  display:flex;
+  padding:8px 6px calc(8px + env(safe-area-inset-bottom)) 6px;
+}
+.navbtn{
+  flex:1; display:flex; flex-direction:column; align-items:center; gap:2px;
+  padding:6px 2px; border-radius:10px; cursor:pointer;
+  color:#8a8177; font-size:10.5px; font-weight:600;
+}
+.navbtn .ni{ font-size:19px; }
+.navbtn.active{ color:var(--maroon); }
+
+/* ---- misc ---- */
+.msg-banner{
+  background:var(--gold); color:#241a03; font-size:12.5px; font-weight:700;
+  padding:9px 14px; border-radius:10px; margin-bottom:12px; text-align:center;
+}
+.section-title{ font-family:'Fraunces',serif; font-size:18px; font-weight:600; margin:6px 0 10px 0; }
+.divider{ height:1px; background:var(--line); margin:16px 0; }
+.stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.stat-box{ background:#fff; border:1.4px solid var(--line); border-radius:12px; padding:12px; }
+.stat-box .v{ font-family:'Fraunces',serif; font-size:22px; font-weight:600; color:var(--maroon); }
+.stat-box .l{ font-size:11px; color:#6b6258; margin-top:2px; }
+.loading-wrap{ display:flex; align-items:center; justify-content:center; min-height:100vh; flex-direction:column; gap:10px; color:var(--maroon); font-family:'Fraunces',serif; }
+.recent-chip{ font-size:12px; padding:6px 11px; border-radius:16px; background:var(--cream-dark); border:1px solid var(--line); cursor:pointer; }
+.overlay-close{ text-align:right; margin-bottom:6px; }
+</style>
+</head>
+<body>
+<div id="app"><div class="loading-wrap">✦ ND Fitness Track<br><span style="font-family:'Work Sans',sans-serif;font-size:12px;color:var(--black);opacity:0.6;">Menyiapkan quest log kamu…</span></div></div>
+
+<script>
+/* =========================================================
+   ND FITNESS TRACK — single-file app
+   ========================================================= */
+
+const XP = {
+  protein:20, veg:10, fruit:5, hydration:10, caffeineFree:15,
+  movement:20, thesisQuest:20,
+  exerciseLogged:8,
+  workoutGym:20, workoutHome:20, workoutKost:20, workoutZumba:35, workoutCustom:18,
+  walkLong:20, walkShort:10,
+  comeback:30, weeklyBoss:100,
+  focus25:10, focus45:15, focus60:20
+};
+
+const LEVELS = [
+  {threshold:0, title:"New Adventurer"},
+  {threshold:500, title:"Habit Builder"},
+  {threshold:1000, title:"Consistency Warrior"},
+  {threshold:2000, title:"Gym Regular"},
+  {threshold:3000, title:"Body Recomp Apprentice"},
+  {threshold:5000, title:"Fitness Main Character"},
+  {threshold:10000, title:"ND Legend"}
+];
+
+const EXERCISES = {
+  "Upper Body": ["Lat Pulldown","Seated Dumbbell Shoulder Press","Butterfly Machine","Seated Row","Lateral Raise","Front Raise","Arnold Press","Biceps Curl","Concentration Curl","Reverse Biceps Curl","Hammer Curl","Triceps Pushdown","Overhead Dumbbell Triceps Extension"],
+  "Lower Body": ["Leg Press","Calf Raise","Hip Abduction","Hip Adduction","Goblet Squat","Glute Bridge","Hip Thrust","Leg Curl","Cable Kickback"],
+  "Core": ["Plank","Dead Bug","Bird Dog","Abdominal Machine","V-Sit","Sit-Up","Pallof Press"]
+};
+const ALL_EXERCISES = Object.values(EXERCISES).flat();
+
+const KOST_POOL = ["Glute Bridge","Slow Squat","Wall Push-up","Bird Dog","Dead Bug","Plank","Kneeling Squat","Standing Knee Raise","Calf Raise"];
+const HOME_POOL = KOST_POOL.concat(["Dumbbell Row","Resistance Band Pull-Apart","Chair Step-up","Mat Bicycle Crunch"]);
+const OUTDOOR_POOL = ["Brisk Walk Interval","Bodyweight Squats","Park Bench Step-up","Stretch & Mobility Flow","Light Jog Interval"];
+const GYM_POOL = ALL_EXERCISES;
+
+const ACHIEVEMENTS = [
+  {id:"first_pr", emoji:"🏆", name:"First PR", desc:"Catat PR pertamamu", check: s => Object.keys(s.exercisePRs).length>0},
+  {id:"club_40kg", emoji:"🏆", name:"40 KG Club", desc:"Angkat 40kg di exercise apapun", check: s => Object.values(s.exercisePRs).some(p=>p.maxWeight>=40)},
+  {id:"lat_pulldown_levelup", emoji:"🏆", name:"Lat Pulldown Level Up", desc:"Naik beban di Lat Pulldown", check: s => (s.exercisePRs["Lat Pulldown"]?.levelUps||0) >= 1},
+  {id:"treadmill_30", emoji:"🏆", name:"Treadmill 30", desc:"Treadmill 30 menit non-stop", check: s => s.treadmill.some(t=>t.duration>=30)},
+  {id:"cardio_goblin", emoji:"🏆", name:"Cardio Goblin", desc:"10 sesi cardio total", check: s => countCardioSessions(s) >= 10},
+  {id:"comeback_kid", emoji:"🏆", name:"Comeback Kid", desc:"Kembali setelah jeda panjang", check: s => s.profile.comebackCount >= 1},
+  {id:"no_all_or_nothing", emoji:"🏆", name:"No All-or-Nothing", desc:"Log workout singkat (≤15 menit)", check: s => s.workouts.some(w=>w.duration && w.duration<=15)},
+  {id:"ten_minute_hero", emoji:"🏆", name:"Ten-Minute Hero", desc:"Log workout ≤10 menit", check: s => s.workouts.some(w=>w.duration && w.duration<=10)},
+  {id:"kost_athlete", emoji:"🏆", name:"Kost Athlete", desc:"5x Kost Workout", check: s => s.workouts.filter(w=>w.location==="Kost").length>=5},
+  {id:"homebody_gains", emoji:"🏆", name:"Homebody Gains", desc:"5x Home Workout", check: s => s.workouts.filter(w=>w.location==="Home").length>=5},
+  {id:"protein_hunter", emoji:"🏆", name:"Protein Hunter", desc:"5 hari protein target tercapai", check: s => countProteinDaysLast(s,30)>=5},
+  {id:"veggie_collector", emoji:"🏆", name:"Veggie Collector", desc:"20 serving sayur total", check: s => Object.values(s.dailyVegFruit).reduce((a,d)=>a+(d.veg||0),0)>=20},
+  {id:"hydration_hero", emoji:"🏆", name:"Hydration Hero", desc:"7 hari hydration target", check: s => Object.entries(s.dailyManual).filter(([d,v])=>v.hydration).length>=7},
+  {id:"caffeine_mastery", emoji:"🏆", name:"Caffeine Mastery", desc:"3 hari beruntun coffee-free", check: s => computeStreak(s, d=>!!s.dailyManual[d]?.caffeineFree)>=3},
+  {id:"thesis_gains", emoji:"🏆", name:"Thesis & Gains", desc:"Movement + Thesis di hari yang sama", check: s => hasComboDay(s)},
+  {id:"busy_but_moving", emoji:"🏆", name:"Busy But Moving", desc:"3 hari kombinasi thesis + gerak", check: s => comboDayCount(s)>=3},
+];
+
+/* ---------------- state ---------------- */
+let state = null;
+let view = "home";
+let trainTab = "log";
+let logExercisesTemp = [];
+let selectedLocation = "Gym";
+let toast = null;
+
+function defaultState(){
+  return {
+    profile:{ xp:0, weight:69, proteinTarget:120, comebackCount:0, lastLoggedDate:null },
+    dailyManual:{},
+    dailyVegFruit:{},
+    workouts:[],
+    treadmill:[],
+    focus:[],
+    food:[],
+    exercisePRs:{},
+    achievementsUnlocked:[],
+    weeklyBossClearedWeek:null
+  };
+}
+
+async function loadState(){
+  try{
+    const res = await window.storage.get('nd-fitness-data', false);
+    if(res && res.value){ return JSON.parse(res.value); }
+  }catch(e){ /* no existing data */ }
+  return null;
+}
+async function saveState(){
+  try{ await window.storage.set('nd-fitness-data', JSON.stringify(state), false); }
+  catch(e){ console.error('save failed', e); }
+}
+
+/* ---------------- date helpers ---------------- */
+function todayStr(){ return dateISO(new Date()); }
+function dateISO(d){ return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+function daysAgoStr(n){ const d=new Date(); d.setDate(d.getDate()-n); return dateISO(d); }
+function mondayOfWeek(dateStr){
+  const d = new Date(dateStr+'T00:00:00');
+  const day = d.getDay(); // 0 sun .. 6 sat
+  const diff = (day===0? -6 : 1-day);
+  d.setDate(d.getDate()+diff);
+  return dateISO(d);
+}
+function datesInRange(startStr, endStr){
+  const out=[]; let d=new Date(startStr+'T00:00:00'); const end=new Date(endStr+'T00:00:00');
+  while(d<=end){ out.push(dateISO(d)); d.setDate(d.getDate()+1); }
+  return out;
+}
+
+/* ---------------- derived data ---------------- */
+function sumProteinForDate(s,date){
+  return s.food.filter(f=>f.date===date).reduce((a,f)=>a+(Number(f.protein)||0),0);
+}
+function isProteinDone(s,date){ return sumProteinForDate(s,date) >= s.profile.proteinTarget; }
+function isMovementDone(s,date){
+  return !!s.dailyManual[date]?.movement || s.workouts.some(w=>w.date===date) || s.treadmill.some(t=>t.date===date);
+}
+function isThesisDone(s,date){
+  return !!s.dailyManual[date]?.thesis || s.focus.some(f=>f.date===date);
+}
+function computeStreak(s, checkFn){
+  let n=0; let d = todayStr();
+  if(!checkFn(d)){ d = daysAgoStr(1); }
+  for(let i=0;i<400;i++){
+    if(checkFn(d)){ n++; const dt=new Date(d+'T00:00:00'); dt.setDate(dt.getDate()-1); d=dateISO(dt); }
+    else break;
+  }
+  return n;
+}
+function countCardioSessions(s){
+  return s.workouts.filter(w=>["Zumba","Walk"].includes(w.location) || w.type==="cardio").length + s.treadmill.length;
+}
+function countProteinDaysLast(s,n){
+  let c=0; for(let i=0;i<n;i++){ if(isProteinDone(s, daysAgoStr(i))) c++; } return c;
+}
+function hasComboDay(s){ return comboDayCount(s)>=1; }
+function comboDayCount(s){
+  let c=0; for(let i=0;i<30;i++){ const d=daysAgoStr(i); if(isMovementDone(s,d) && isThesisDone(s,d)) c++; } return c;
+}
+function levelInfo(xp){
+  let idx=0;
+  for(let i=0;i<LEVELS.length;i++){ if(xp>=LEVELS[i].threshold) idx=i; }
+  const cur = LEVELS[idx];
+  const next = LEVELS[idx+1];
+  const pct = next ? Math.min(100, Math.round(((xp-cur.threshold)/(next.threshold-cur.threshold))*100)) : 100;
+  return { levelNum: idx+1, title: cur.title, next, pct, xp };
+}
+function addXP(amount){ state.profile.xp += amount; }
+
+function weeklyBossObjectives(s){
+  const monday = mondayOfWeek(todayStr());
+  const days = datesInRange(monday, todayStr());
+  const strength = s.workouts.filter(w=> days.includes(w.date) && ["Gym","Home","Kost","Custom"].includes(w.location) && w.exercises && w.exercises.length>0).length;
+  const cardio = s.workouts.filter(w=> days.includes(w.date) && ["Zumba","Walk"].includes(w.location)).length + s.treadmill.filter(t=>days.includes(t.date)).length;
+  const proteinDays = days.filter(d=>isProteinDone(s,d)).length;
+  const hydrationDays = days.filter(d=> !!s.dailyManual[d]?.hydration).length;
+  const focusSessions = s.focus.filter(f=>days.includes(f.date)).length;
+  return [
+    { id:"strength", label:"2 sesi strength", have:strength, need:2 },
+    { id:"cardio", label:"1 sesi cardio", have:cardio, need:1 },
+    { id:"protein", label:"Protein target 4 hari", have:proteinDays, need:4 },
+    { id:"hydration", label:"3 hari hydration", have:hydrationDays, need:3 },
+    { id:"focus", label:"3 sesi focus", have:focusSessions, need:3 },
+  ];
+}
+function checkWeeklyBoss(){
+  const objs = weeklyBossObjectives(state);
+  const cleared = objs.every(o=>o.have>=o.need);
+  const monday = mondayOfWeek(todayStr());
+  if(cleared && state.weeklyBossClearedWeek !== monday){
+    state.weeklyBossClearedWeek = monday;
+    addXP(XP.weeklyBoss);
+    toast = "🏆 WEEKLY BOSS CLEARED — +100 XP";
+  }
+}
+function checkAchievements(){
+  const newly=[];
+  ACHIEVEMENTS.forEach(a=>{
+    if(!state.achievementsUnlocked.includes(a.id) && a.check(state)){
+      state.achievementsUnlocked.push(a.id);
+      newly.push(a.name);
+    }
+  });
+  if(newly.length){ toast = "🏅 Achievement unlocked: " + newly.join(", "); }
+}
+function afterMutation(){
+  checkWeeklyBoss();
+  checkAchievements();
+  saveState();
+  render();
+}
+
+/* ---------------- mutation actions ---------------- */
+function markManual(field, xp){
+  const d = todayStr();
+  if(!state.dailyManual[d]) state.dailyManual[d] = {};
+  if(state.dailyManual[d][field]) return; // one-way, no negative xp
+  state.dailyManual[d][field] = true;
+  addXP(xp);
+  afterMutation();
+}
+function addVegFruit(kind){
+  const d = todayStr();
+  if(!state.dailyVegFruit[d]) state.dailyVegFruit[d] = {veg:0, fruit:0};
+  state.dailyVegFruit[d][kind] += 1;
+  addXP(kind==="veg" ? XP.veg : XP.fruit);
+  afterMutation();
+}
+
+function maybeComeback(dateLogged){
+  const last = state.profile.lastLoggedDate;
+  if(last){
+    const gapDays = Math.round((new Date(dateLogged) - new Date(last))/86400000);
+    if(gapDays>=7){
+      state.profile.comebackCount += 1;
+      addXP(XP.comeback);
+      toast = "🌱 Comeback Quest complete — +30 XP. Selamat datang kembali!";
+    }
+  }
+  state.profile.lastLoggedDate = dateLogged;
+}
+
+function addExerciseToTemp(){
+  const ex = document.getElementById('ex-select').value;
+  const w = Number(document.getElementById('ex-weight').value)||0;
+  const r = Number(document.getElementById('ex-reps').value)||0;
+  const st = Number(document.getElementById('ex-sets').value)||1;
+  const note = document.getElementById('ex-notes').value;
+  if(!ex || !w || !r){ return; }
+  logExercisesTemp.push({exercise:ex, weight:w, reps:r, sets:st, notes:note});
+  render();
+}
+function removeTempExercise(i){ logExercisesTemp.splice(i,1); render(); }
+
+function updatePR(entry){
+  const prevPR = state.exercisePRs[entry.exercise];
+  let tag = "";
+  if(!prevPR){
+    state.exercisePRs[entry.exercise] = { maxWeight: entry.weight, maxRepsAtMax: entry.reps, bestVolume: entry.weight*entry.reps*entry.sets, levelUps:0 };
+    tag = "PR!";
+  } else {
+    const vol = entry.weight*entry.reps*entry.sets;
+    if(entry.weight > prevPR.maxWeight){
+      prevPR.maxWeight = entry.weight; prevPR.maxRepsAtMax = entry.reps; prevPR.levelUps += 1; tag = "NEW WEIGHT UNLOCKED";
+    } else if(entry.weight === prevPR.maxWeight && entry.reps > prevPR.maxRepsAtMax){
+      prevPR.maxRepsAtMax = entry.reps; tag = "EXERCISE LEVEL UP";
+    }
+    if(vol > prevPR.bestVolume) prevPR.bestVolume = vol;
+  }
+  return tag;
+}
+
+function saveWorkout(){
+  const duration = Number(document.getElementById('w-duration').value)||0;
+  const energy = document.getElementById('w-energy').value;
+  const notes = document.getElementById('w-notes').value;
+  const date = todayStr();
+  let xpGain = 0;
+  const isStrength = ["Gym","Home","Kost"].includes(selectedLocation) && logExercisesTemp.length>0;
+
+  logExercisesTemp.forEach(e=>{ updatePR(e); xpGain += XP.exerciseLogged; });
+
+  if(selectedLocation==="Gym") xpGain += XP.workoutGym;
+  else if(selectedLocation==="Home") xpGain += XP.workoutHome;
+  else if(selectedLocation==="Kost") xpGain += XP.workoutKost;
+  else if(selectedLocation==="Zumba") xpGain += XP.workoutZumba;
+  else if(selectedLocation==="Walk") xpGain += (duration>=30 ? XP.walkLong : XP.walkShort);
+  else xpGain += XP.workoutCustom;
+
+  const workout = { id:Date.now(), date, location:selectedLocation, duration, energy, notes, exercises:[...logExercisesTemp] };
+  state.workouts.push(workout);
+  addXP(xpGain);
+  maybeComeback(date);
+  if(!state.dailyManual[date]) state.dailyManual[date]={};
+  logExercisesTemp = [];
+  toast = `Workout tersimpan — +${xpGain} XP`;
+  afterMutation();
+}
+
+function saveTreadmill(){
+  const duration = Number(document.getElementById('t-duration').value)||0;
+  const speed = Number(document.getElementById('t-speed').value)||0;
+  const incline = Number(document.getElementById('t-incline').value)||0;
+  const distance = Number(document.getElementById('t-distance').value)||0;
+  if(!duration){ return; }
+  const date = todayStr();
+  let xp = duration>=30 ? 35 : duration>=20 ? 25 : 15;
+  state.treadmill.push({id:Date.now(), date, duration, speed, incline, distance});
+  addXP(xp);
+  maybeComeback(date);
+  toast = `Treadmill quest tersimpan — +${xp} XP`;
+  afterMutation();
+}
+
+function saveFocus(mins){
+  const date = todayStr();
+  let xp = mins>=60 ? XP.focus60 : mins>=45 ? XP.focus45 : XP.focus25;
+  state.focus.push({id:Date.now(), date, duration:mins});
+  addXP(xp);
+  toast = `Focus session tersimpan — +${xp} XP`;
+  afterMutation();
+}
+
+function saveFood(){
+  const meal = document.getElementById('f-meal').value;
+  const food = document.getElementById('f-food').value.trim();
+  const calories = Number(document.getElementById('f-cal').value)||0;
+  const protein = Number(document.getElementById('f-protein').value)||0;
+  const carbs = Number(document.getElementById('f-carbs').value)||0;
+  const fat = Number(document.getElementById('f-fat').value)||0;
+  const notes = document.getElementById('f-notes').value;
+  if(!food){ return; }
+  state.food.push({id:Date.now(), date:todayStr(), meal, food, calories, protein, carbs, fat, notes});
+  toast = `${food} dicatat.`;
+  afterMutation();
+}
+function prefillFood(name, cal, pro, carb, fat){
+  document.getElementById('f-food').value = name;
+  document.getElementById('f-cal').value = cal;
+  document.getElementById('f-protein').value = pro;
+  document.getElementById('f-carbs').value = carb||0;
+  document.getElementById('f-fat').value = fat||0;
+}
+
+function setWeight(){
+  const w = Number(document.getElementById('settings-weight').value);
+  if(w>0){ state.profile.weight = w; }
+  const t = Number(document.getElementById('settings-protein').value);
+  if(t>0){ state.profile.proteinTarget = t; }
+  toast = "Profil diperbarui.";
+  view="progress";
+  afterMutation();
+}
+function resetAllData(){
+  if(!confirm("Reset semua data ND Fitness Track? Tindakan ini tidak bisa dibatalkan.")) return;
+  state = defaultState();
+  toast = "Data direset. Fresh start!";
+  view="home";
+  afterMutation();
+}
+
+/* ---------------- quest generator ---------------- */
+function shuffle(arr){ const a=[...arr]; for(let i=a.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [a[i],a[j]]=[a[j],a[i]]; } return a; }
+let genResult = null;
+function generateQuest(){
+  const time = document.getElementById('gen-time').value;
+  const energy = document.getElementById('gen-energy').value;
+  const loc = document.getElementById('gen-location').value;
+  let pool = loc==="Kost" ? KOST_POOL : loc==="Home" ? HOME_POOL : loc==="Outdoors" ? OUTDOOR_POOL : GYM_POOL;
+  const countMap = {"10":3, "15":4, "20":4, "30":5, "45+":6};
+  const roundsMap = {"10":2, "15":3, "20":3, "30":4, "45+":5};
+  const n = countMap[time];
+  const picks = shuffle(pool).slice(0, n);
+  const rounds = roundsMap[time];
+  const repsBase = energy==="Low" ? 8 : energy==="High" ? 15 : 12;
+  const xp = 20 + rounds*3 + (energy==="High"?10:energy==="Medium"?5:0);
+  const title = loc==="Kost" ? "🛏️ KOST QUEST" : loc==="Home" ? "🏠 HOME QUEST" : loc==="Outdoors" ? "🌳 OUTDOOR QUEST" : "🏋️ GYM QUEST";
+  genResult = { title, loc, rounds, repsBase, picks, xp, time, energy };
+  render();
+}
+function acceptGeneratedQuest(){
+  if(!genResult) return;
+  addXP(genResult.xp);
+  const date = todayStr();
+  if(!state.dailyManual[date]) state.dailyManual[date]={};
+  state.dailyManual[date].movement = true;
+  const isKostHome = genResult.loc==="Kost" || genResult.loc==="Home";
+  state.workouts.push({id:Date.now(), date, location: genResult.loc==="Outdoors"?"Custom":genResult.loc, duration:Number(genResult.time)||45, energy:genResult.energy, notes:"Generated quest: "+genResult.title, exercises:[]});
+  maybeComeback(date);
+  toast = `${genResult.title} selesai — +${genResult.xp} XP`;
+  genResult = null;
+  afterMutation();
+}
+
+/* ---------------- render ---------------- */
+function setView(v){ view=v; trainTab="log"; genResult=null; render(); }
+function setTrainTab(t){ trainTab=t; render(); }
+function setLocation(l){ selectedLocation=l; render(); }
+
+function render(){
+  const s = state;
+  const li = levelInfo(s.profile.xp);
+  const app = document.getElementById('app');
+
+  let body = "";
+  if(view==="home") body = renderHome(s, li);
+  else if(view==="quests") body = renderQuests(s);
+  else if(view==="train") body = renderTrain(s);
+  else if(view==="food") body = renderFood(s);
+  else if(view==="progress") body = renderProgress(s, li);
+  else if(view==="settings") body = renderSettings(s);
+
+  app.innerHTML = `
+    <div class="topbar">
+      <div class="brand">
+        <span class="mark">ND Fitness Track</span>
+      </div>
+      <div class="avatar" onclick="setView('settings')">${li.levelNum}</div>
+    </div>
+    ${toast ? `<div class="section"><div class="msg-banner">${toast}</div></div>` : ""}
+    ${body}
+    <div class="bottomnav">
+      ${navBtn('home','🏠','Home')}
+      ${navBtn('quests','⚔️','Quests')}
+      ${navBtn('train','🏋️','Train')}
+      ${navBtn('food','🥗','Food')}
+      ${navBtn('progress','🏆','Progress')}
+    </div>
+  `;
+  toast = null;
+}
+function navBtn(v, icon, label){
+  return `<div class="navbtn ${view===v?'active':''}" onclick="setView('${v}')"><span class="ni">${icon}</span>${label}</div>`;
+}
+
+function renderHome(s, li){
+  const streaks = {
+    movement: computeStreak(s, d=>isMovementDone(s,d)),
+    nutrition: computeStreak(s, d=>isProteinDone(s,d)),
+    thesis: computeStreak(s, d=>isThesisDone(s,d)),
+  };
+  return `
+  <div class="section">
+    <div class="charcard">
+      <div class="lvl-row">
+        <div>
+          <div class="lvl-num">LVL ${li.levelNum}</div>
+          <div class="title">${li.title}</div>
+        </div>
+        <div class="xp-txt">${li.xp} ${li.next ? '/ '+li.next.threshold : ''} XP</div>
+      </div>
+      <div class="xpbar-track"><div class="xpbar-fill" style="width:${li.pct}%"></div></div>
+      <div class="streak-row">
+        <span class="streak-chip">🔥 Movement: ${streaks.movement}d</span>
+        <span class="streak-chip">🥗 Nutrition: ${streaks.nutrition}d</span>
+        <span class="streak-chip">📚 Thesis: ${streaks.thesis}d</span>
+        <span class="streak-chip">🌱 Comeback: ${s.profile.comebackCount}</span>
+      </div>
+      <div class="quick-grid">
+        <div class="quick-btn" onclick="setView('food')"><span class="qi">🍽️</span>FOOD</div>
+        <div class="quick-btn" onclick="setView('train')"><span class="qi">💪</span>WORKOUT</div>
+        <div class="quick-btn" onclick="setView('quests')"><span class="qi">✅</span>HABIT</div>
+        <div class="quick-btn" onclick="setView('train'); setTrainTab('focus')"><span class="qi">🧠</span>FOCUS</div>
+      </div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="eyebrow">Today's Quests</div>
+    ${questListMini(s)}
+  </div>
+  <div class="section">
+    ${weeklyBossCard(s)}
+  </div>
+  `;
+}
+
+function questDef(s){
+  const d = todayStr();
+  const dm = s.dailyManual[d] || {};
+  return [
+    { key:"protein", label:"Protein Hunter", xp:XP.protein, done: isProteinDone(s,d), manual:false },
+    { key:"movement", label:"Movement", xp:XP.movement, done: isMovementDone(s,d), manual:true },
+    { key:"hydration", label:"Hydration", xp:XP.hydration, done: !!dm.hydration, manual:true },
+    { key:"thesis", label:"Thesis Quest", xp:XP.thesisQuest, done: isThesisDone(s,d), manual:true },
+    { key:"caffeineFree", label:"Caffeine-free Day", xp:XP.caffeineFree, done: !!dm.caffeineFree, manual:true },
+  ];
+}
+function questListMini(s){
+  const quests = questDef(s);
+  return `<div class="card">${quests.map(q=>`
+    <div class="quest-item">
+      <div class="quest-left">
+        <div class="quest-check ${q.done?'done':''}" ${q.manual && !q.done ? `onclick="markManual('${q.key}', ${q.xp})"` : ''}>${q.done?'✓':''}</div>
+        <div class="quest-label ${q.done?'done':''}">${q.label}</div>
+      </div>
+      <div class="quest-xp">+${q.xp} XP</div>
+    </div>
+  `).join('')}</div>`;
+}
+function weeklyBossCard(s){
+  const objs = weeklyBossObjectives(s);
+  const cleared = objs.every(o=>o.have>=o.need);
+  return `
+  <div class="boss-card">
+    <h3>WEEKLY BOSS</h3>
+    <div class="boss-sub">The Consistency Trial · minggu ini</div>
+    ${objs.map(o=>`
+      <div class="boss-obj"><span class="dot ${o.have>=o.need?'on':''}"></span> ${o.label} (${Math.min(o.have,o.need)}/${o.need})</div>
+    `).join('')}
+    ${cleared ? `<div class="boss-cleared">🏆 BOSS CLEARED — +100 XP</div>` : ''}
+  </div>`;
+}
+
+function renderQuests(s){
+  return `
+  <div class="section">
+    <div class="section-title">Today's Quests</div>
+    <div class="small-muted" style="margin:-4px 0 12px 2px;">Quest yang sudah selesai tetap terkunci "done" — no negative XP, ever.</div>
+    ${questListMini(s)}
+  </div>
+  <div class="section">
+    ${weeklyBossCard(s)}
+  </div>
+  `;
+}
+
+function renderTrain(s){
+  const tabs = [["log","Log Workout"],["exercises","Exercises & PR"],["treadmill","Treadmill"],["focus","Focus"],["generator","Quest Generator"]];
+  return `
+  <div class="section">
+    <div class="section-title">Train</div>
+    <div class="tabbar">${tabs.map(([k,l])=>`<div class="tabbtn ${trainTab===k?'active':''}" onclick="setTrainTab('${k}')">${l}</div>`).join('')}</div>
+    ${trainTab==="log" ? renderLogWorkout(s) : ""}
+    ${trainTab==="exercises" ? renderExercisesPR(s) : ""}
+    ${trainTab==="treadmill" ? renderTreadmill(s) : ""}
+    ${trainTab==="focus" ? renderFocus(s) : ""}
+    ${trainTab==="generator" ? renderGenerator(s) : ""}
+  </div>
+  `;
+}
+
+function renderLogWorkout(s){
+  const locations = ["Gym","Home","Kost","Zumba","Walk","Custom"];
+  const isStrength = ["Gym","Home","Kost"].includes(selectedLocation);
+  return `
+  <div class="card">
+    <label>Location</label>
+    <div class="chip-row">
+      ${locations.map(l=>`<div class="chip ${selectedLocation===l?'active':''}" onclick="setLocation('${l}')">${locEmoji(l)} ${l}</div>`).join('')}
+    </div>
+
+    ${isStrength ? `
+      <div class="divider"></div>
+      <label>Tambah Exercise</label>
+      <select id="ex-select">
+        ${Object.entries(EXERCISES).map(([grp, list])=>`<optgroup label="${grp}">${list.map(e=>`<option value="${e}">${e}</option>`).join('')}</optgroup>`).join('')}
+      </select>
+      <div class="row3" style="margin-top:8px;">
+        <div><label>Kg</label><input id="ex-weight" type="number" placeholder="30"></div>
+        <div><label>Reps</label><input id="ex-reps" type="number" placeholder="12"></div>
+        <div><label>Sets</label><input id="ex-sets" type="number" placeholder="2" value="2"></div>
+      </div>
+      <label>Notes (opsional)</label>
+      <input id="ex-notes" type="text" placeholder="cth. terasa ringan">
+      <button class="btn btn-outline btn-full" style="margin-top:10px;" onclick="addExerciseToTemp()">+ Tambah Set</button>
+
+      ${logExercisesTemp.length ? `
+      <div class="divider"></div>
+      ${logExercisesTemp.map((e,i)=>`
+        <div class="set-row">
+          <span>${e.exercise} — ${e.weight}kg × ${e.reps} × ${e.sets}</span>
+          <span style="cursor:pointer;color:var(--maroon);" onclick="removeTempExercise(${i})">✕</span>
+        </div>
+      `).join('')}
+      ` : ''}
+    ` : ''}
+
+    <div class="divider"></div>
+    <div class="row2">
+      <div><label>Durasi (menit)</label><input id="w-duration" type="number" placeholder="20"></div>
+      <div><label>Energy</label>
+        <select id="w-energy">
+          <option>Low</option><option selected>Medium</option><option>High</option>
+        </select>
+      </div>
+    </div>
+    <label>Notes (opsional)</label>
+    <textarea id="w-notes" placeholder="cth. leher agak pegal, kurangi rotasi"></textarea>
+    <button class="btn btn-maroon btn-full" style="margin-top:12px;" onclick="saveWorkout()">Save Workout</button>
+    <div class="small-muted">10 menit tetap dihitung. Kita tidak main all-or-nothing di sini.</div>
+  </div>
+  `;
+}
+function locEmoji(l){ return {Gym:"🏋️",Home:"🏠",Kost:"🛏️",Zumba:"💃",Walk:"🚶",Custom:"✨"}[l]||""; }
+
+function renderExercisesPR(s){
+  const entries = Object.entries(s.exercisePRs);
+  return `
+  <div class="card">
+    <div class="eyebrow" style="margin-bottom:10px;">Personal Records</div>
+    ${entries.length===0 ? `<div class="small-muted">Belum ada PR tercatat. Mulai log workout untuk membuka progression.</div>` :
+      entries.map(([name,pr])=>`
+        <div class="set-row">
+          <span><b>${name}</b><br><span style="font-size:11.5px;color:#6b6258;">Best volume ${pr.bestVolume}</span></span>
+          <span style="text-align:right;">${pr.maxWeight}kg × ${pr.maxRepsAtMax}<br><span class="pr-tag">${pr.levelUps>0?'🎉 '+pr.levelUps+' level up':''}</span></span>
+        </div>
+      `).join('')
+    }
+  </div>
+  <div class="card">
+    <div class="eyebrow" style="margin-bottom:6px;">Exercise Database</div>
+    ${Object.entries(EXERCISES).map(([grp,list])=>`
+      <div style="font-size:12.5px;font-weight:700;margin:8px 0 4px 0;color:var(--navy);">${grp}</div>
+      <div class="chip-row">${list.map(e=>`<span class="chip" style="cursor:default;">${e}</span>`).join('')}</div>
+    `).join('')}
+  </div>
+  `;
+}
+
+function renderTreadmill(s){
+  const best = s.treadmill.reduce((m,t)=>Math.max(m,t.duration),0);
+  const levels = [15,17,20,22,25,30];
+  const curLevel = levels.filter(l=>best>=l).length;
+  return `
+  <div class="card">
+    <div class="eyebrow">Treadmill Quest</div>
+    <div class="small-muted" style="margin-bottom:8px;">Level saat ini: ${curLevel}/6 ${best>=30?'— 🏆 BOSS CLEARED':''} · durasi terbaik ${best} menit</div>
+    <div class="row2">
+      <div><label>Durasi (menit)</label><input id="t-duration" type="number" placeholder="20"></div>
+      <div><label>Speed (km/j)</label><input id="t-speed" type="number" placeholder="6"></div>
+    </div>
+    <div class="row2">
+      <div><label>Incline (%)</label><input id="t-incline" type="number" placeholder="1"></div>
+      <div><label>Distance (km, opsional)</label><input id="t-distance" type="number" placeholder="2"></div>
+    </div>
+    <button class="btn btn-maroon btn-full" style="margin-top:12px;" onclick="saveTreadmill()">Save Treadmill</button>
+  </div>
+  <div class="card">
+    <div class="eyebrow" style="margin-bottom:8px;">Riwayat</div>
+    ${s.treadmill.slice().reverse().slice(0,8).map(t=>`
+      <div class="set-row"><span>${t.date}</span><span>${t.duration} min · ${t.speed}km/j</span></div>
+    `).join('') || `<div class="small-muted">Belum ada sesi treadmill.</div>`}
+  </div>
+  `;
+}
+
+function renderFocus(s){
+  const todayFocus = s.focus.filter(f=>f.date===todayStr());
+  return `
+  <div class="card">
+    <div class="eyebrow">🧠 Thesis Boss</div>
+    <div class="small-muted" style="margin-bottom:10px;">Bukan pengganti productivity app — cukup dukung fokus kecil untuk thesis/kerja.</div>
+    <div class="chip-row">
+      <div class="chip" onclick="saveFocus(25)">25 min · +10 XP</div>
+      <div class="chip" onclick="saveFocus(45)">45 min · +15 XP</div>
+      <div class="chip" onclick="saveFocus(60)">60+ min · +20 XP</div>
+    </div>
+    <div class="small-muted" style="margin-top:10px;">Sesi fokus hari ini: ${todayFocus.length}</div>
+  </div>
+  `;
+}
+
+function renderGenerator(s){
+  return `
+  <div class="card">
+    <div class="eyebrow">Random Quest Generator</div>
+    <label>Waktu tersedia</label>
+    <select id="gen-time">
+      <option value="10">10 menit</option>
+      <option value="15" selected>15 menit</option>
+      <option value="20">20 menit</option>
+      <option value="30">30 menit</option>
+      <option value="45+">45+ menit</option>
+    </select>
+    <label>Energy</label>
+    <select id="gen-energy">
+      <option>Low</option><option selected>Medium</option><option>High</option>
+    </select>
+    <label>Location</label>
+    <select id="gen-location">
+      <option>Kost</option><option>Home</option><option>Gym</option><option>Outdoors</option>
+    </select>
+    <button class="btn btn-navy btn-full" style="margin-top:12px;" onclick="generateQuest()">Generate Quest</button>
+  </div>
+  ${genResult ? `
+  <div class="boss-card">
+    <h3>${genResult.title}</h3>
+    <div class="boss-sub">${genResult.rounds} rounds · reps ~${genResult.repsBase}</div>
+    ${genResult.picks.map(p=>`<div class="boss-obj"><span class="dot on"></span> ${p} × ${genResult.repsBase}</div>`).join('')}
+    <button class="btn btn-full" style="margin-top:12px;background:var(--gold);color:#241a03;" onclick="acceptGeneratedQuest()">Selesaikan Quest · +${genResult.xp} XP</button>
+  </div>
+  ` : ''}
+  `;
+}
+
+function renderFood(s){
+  const d = todayStr();
+  const todayFood = s.food.filter(f=>f.date===d);
+  const cal = todayFood.reduce((a,f)=>a+f.calories,0);
+  const pro = todayFood.reduce((a,f)=>a+f.protein,0);
+  const vf = s.dailyVegFruit[d] || {veg:0, fruit:0};
+  const recent = [];
+  const seen = new Set();
+  s.food.slice().reverse().forEach(f=>{ if(!seen.has(f.food)){ seen.add(f.food); recent.push(f); } });
+
+  return `
+  <div class="section">
+    <div class="section-title">Food</div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="v">${cal}</div><div class="l">kcal hari ini</div></div>
+      <div class="stat-box"><div class="v">${pro}/${s.profile.proteinTarget}g</div><div class="l">protein</div></div>
+      <div class="stat-box"><div class="v">${vf.veg}/2</div><div class="l">vegetables</div></div>
+      <div class="stat-box"><div class="v">${vf.fruit}/1</div><div class="l">fruit</div></div>
+    </div>
+    <div class="chip-row" style="margin-top:10px;">
+      <div class="chip" onclick="addVegFruit('veg')">+ Vegetable serving · +10 XP</div>
+      <div class="chip" onclick="addVegFruit('fruit')">+ Fruit serving · +5 XP</div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="card">
+      <div class="eyebrow">Log Food</div>
+      <label>Meal</label>
+      <select id="f-meal">
+        <option>Breakfast</option><option>Lunch</option><option>Dinner</option><option>Snack</option>
+      </select>
+      <label>Food</label>
+      <input id="f-food" type="text" placeholder="cth. KitKat Choco Drink">
+      <div class="row2">
+        <div><label>Calories</label><input id="f-cal" type="number" placeholder="150"></div>
+        <div><label>Protein (g)</label><input id="f-protein" type="number" placeholder="4"></div>
+      </div>
+      <div class="row2">
+        <div><label>Carbs (g, opsional)</label><input id="f-carbs" type="number"></div>
+        <div><label>Fat (g, opsional)</label><input id="f-fat" type="number"></div>
+      </div>
+      <label>Notes (opsional)</label>
+      <input id="f-notes" type="text">
+      <button class="btn btn-maroon btn-full" style="margin-top:12px;" onclick="saveFood()">Add Food</button>
+      ${recent.length ? `
+        <div class="small-muted" style="margin-top:10px;">Recent:</div>
+        <div class="chip-row">
+          ${recent.slice(0,8).map(f=>`<span class="recent-chip" onclick="prefillFood('${escAttr(f.food)}',${f.calories},${f.protein},${f.carbs||0},${f.fat||0})">${f.food}</span>`).join('')}
+        </div>
+      ` : ''}
+    </div>
+    <div class="card">
+      <div class="eyebrow" style="margin-bottom:8px;">Hari ini</div>
+      ${todayFood.length===0 ? `<div class="small-muted">Belum ada entri makanan hari ini.</div>` :
+        todayFood.map(f=>`<div class="set-row"><span>${f.meal}: ${f.food}</span><span>${f.calories}kcal · ${f.protein}g</span></div>`).join('')}
+    </div>
+  </div>
+  `;
+}
+function escAttr(str){ return String(str).replace(/'/g, "\\'"); }
+
+function renderProgress(s, li){
+  const weekWorkouts = s.workouts.length;
+  const avgProtein = Math.round((s.food.filter(f=>{ const diff=(new Date(todayStr())-new Date(f.date))/86400000; return diff<7; }).reduce((a,f)=>a+f.protein,0))/7);
+  return `
+  <div class="section">
+    <div class="section-title">Progress</div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="v">${s.workouts.length}</div><div class="l">total sesi workout</div></div>
+      <div class="stat-box"><div class="v">${avgProtein}g</div><div class="l">rata2 protein/hari (7d)</div></div>
+      <div class="stat-box"><div class="v">${s.profile.weight}kg</div><div class="l">berat saat ini</div></div>
+      <div class="stat-box"><div class="v">${s.profile.comebackCount}</div><div class="l">comeback count</div></div>
+    </div>
+  </div>
+  <div class="section">
+    <div class="eyebrow">Achievements (${s.achievementsUnlocked.length}/${ACHIEVEMENTS.length})</div>
+    <div class="ach-grid">
+      ${ACHIEVEMENTS.map(a=>{
+        const unlocked = s.achievementsUnlocked.includes(a.id);
+        return `<div class="ach-card ${unlocked?'':'locked'}">
+          <span class="ach-emoji">${a.emoji}</span>
+          <div class="ach-name">${a.name}</div>
+          <div class="ach-desc">${a.desc}</div>
+        </div>`;
+      }).join('')}
+    </div>
+  </div>
+  <div class="section">
+    <div class="card" style="text-align:center;">
+      <div class="small-muted">Butuh ubah target protein atau berat badan?</div>
+      <button class="btn btn-outline btn-sm" style="margin-top:8px;" onclick="setView('settings')">Buka Settings</button>
+    </div>
+  </div>
+  `;
+}
+
+function renderSettings(s){
+  return `
+  <div class="section">
+    <div class="overlay-close"><span class="btn btn-outline btn-sm" onclick="setView('progress')">Tutup</span></div>
+    <div class="section-title">Settings</div>
+    <div class="card">
+      <label>Current weight (kg)</label>
+      <input id="settings-weight" type="number" value="${s.profile.weight}">
+      <label>Protein target (g/hari)</label>
+      <input id="settings-protein" type="number" value="${s.profile.proteinTarget}">
+      <div class="small-muted">Berat badan tidak pernah mengurangi XP kamu — ini murni untuk tracking tren.</div>
+      <button class="btn btn-maroon btn-full" style="margin-top:12px;" onclick="setWeight()">Save</button>
+    </div>
+    <div class="card">
+      <div class="eyebrow">Data</div>
+      <div class="small-muted" style="margin-bottom:10px;">Semua data tersimpan lokal untuk akunmu, tidak dibagikan.</div>
+      <button class="btn btn-outline btn-full" onclick="resetAllData()">Reset semua data</button>
+    </div>
+  </div>
+  `;
+}
+
+/* ---------------- boot ---------------- */
+(async function init(){
+  const loaded = await loadState();
+  state = loaded || defaultState();
+  render();
+})();
+</script>
+</body>
+</html>
